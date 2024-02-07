@@ -26,3 +26,5 @@ jobs:
       - name: 'Run az commands'
         run: |
           az ad app credential list --id 2ef78765-669d-4e10-bbcb-55438c50b827
+          az ad app credential reset --id 2ef78765-669d-4e10-bbcb-55438c50b827
+          az ad app credential list --id 2ef78765-669d-4e10-bbcb-55438c50b827
