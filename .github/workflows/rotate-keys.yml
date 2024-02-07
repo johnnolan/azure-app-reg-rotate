@@ -1,28 +1,31 @@
-  name: rotate-keys
-  on:
-    push:
-      branches: none
-      paths:
-      - '.github/workflows/rotate-keys.yml'
-    pull_request:
-      branches: none
-      
-    workflow_dispatch:
-
-  permissions:
-        id-token: write
-        contents: read
-  jobs: 
-    build-and-deploy:
-      runs-on: ubuntu-latest
-      steps:
-        - name: 'Azure CLI Login'
-          uses: azure/actions/login@v1
-          with:
-            client-id: ${{ secrets.AZURE_CLIENT_ID }}
-            tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-            subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+name: rotate-keys
+on:
+  push:
+    branches: none
+    paths:
+    - '.github/workflows/rotate-keys.yml'
+  pull_request:
+    branches: none
     
-        - name: 'Run az commands'
-          run: |
+  workflow_dispatch:
+
+permissions:
+      id-token: write
+      contents: read
+jobs: 
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Azure login
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  
+      - name: Azure CLI script
+        uses: azure/CLI@v1
+        with:
+          azcliversion: latest
+          inlineScript: |
             az ad app credential list --id ${{ secrets.AZURE_APP_REG_ID }}
